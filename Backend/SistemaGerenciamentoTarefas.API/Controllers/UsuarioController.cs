@@ -17,7 +17,7 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
         [HttpGet]
         public async Task<IActionResult> BuscarTodosAssync() {
 
-            var produtos = await _usuarioService.BuscarTodosAsync();
+            var produtos = await _usuarioService.BuscarTodosUsuariosAsync();
             return Ok(produtos);
         }
 
@@ -30,7 +30,7 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
 
             try {
 
-                var usuarioCriado = await _usuarioService.AdicionarUsuarioAsync(usuario);
+                var usuarioCriado = await _usuarioService.CadastrarUsuarioAsync(usuario);
 
                 return StatusCode(201, usuarioCriado);
             }

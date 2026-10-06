@@ -5,9 +5,9 @@ namespace SistemaGerenciamentoTarefas.API.Repositories {
 
         Task<List<Usuario>> BuscarTodosUsuariosAsync();
         Task<Usuario?> BuscarUsuarioPorIdAsync(int id);
-        Task<Usuario> AdicionarUsuarioAsync(Usuario usuario);
+        Task<Usuario> CadastrarUsuarioAsync(Usuario usuario);
         Task<Usuario?> AtualizarUsuarioAsync(int id, Usuario usuarioAtualizado);
         Task<bool> DeletarUsuarioAsync(int id);
-        Task<bool> EmailExisteAsync(string email);
+        Task<bool> EmailExisteAsync(string email, int? usuarioId = null);
     }
 }

@@ -2,6 +2,10 @@
 
 namespace SistemaGerenciamentoTarefas.API.Services {
     public interface IUsuarioService {
-        Task<Usuario> AdicionarUsuarioAsync(Usuario usuario);
+        Task<List<Usuario>> BuscarTodosUsuariosAsync();
+        Task<Usuario?> BuscarUsuarioPorIdAsync(int id);
+        Task<Usuario> CadastrarUsuarioAsync(Usuario usuario);
+        Task<Usuario?> AtualizarUsuarioAsync(int id, Usuario usuarioAtualizado);
+        Task<bool> DeletarUsuarioAsync(int id);
     }
 }

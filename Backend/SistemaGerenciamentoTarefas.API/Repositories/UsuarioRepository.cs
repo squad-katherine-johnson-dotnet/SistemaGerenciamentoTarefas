@@ -20,7 +20,7 @@ namespace SistemaGerenciamentoTarefas.API.Repositories {
             return await _context.Usuarios.FindAsync(id);
         }
 
-        public async Task<Usuario> AdicionarUsuarioAsync(Usuario usuario) {
+        public async Task<Usuario> CadastrarUsuarioAsync(Usuario usuario) {
 
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
@@ -53,9 +53,9 @@ namespace SistemaGerenciamentoTarefas.API.Repositories {
             return true;
         }
 
-        public async Task<bool> EmailExisteAsync(string email) {
+        public async Task<bool> EmailExisteAsync(string email, int? usuarioId = null) {
 
-            return await _context.Usuarios.AnyAsync(u => u.Email == email);
+            return await _context.Usuarios.AnyAsync(u => u.Email == email && u.Id != usuarioId);
         }
     }
 }
