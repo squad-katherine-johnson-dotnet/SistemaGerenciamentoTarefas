@@ -39,6 +39,6 @@ Este projeto é um sistema de gerenciamento de tarefas que permite cadastrar usu
 ## 7. 👩‍💻 Integrantes e Contribuições
 
 - **Bianca Fernandes:** Base da API e Cadastro de Usuários
-- **Marina Brombrilla:** Endpoints de Tarefas e Tratamento de Erros
+- **Marina Brombilla:** Endpoints de Tarefas e Tratamento de Erros
 - **Rosana Lima:** Angular - Base, Cadastro e Formulários
 - **Yasmin Bezerra:** Angular - Listagem de Tarefas e Documentação (README)
