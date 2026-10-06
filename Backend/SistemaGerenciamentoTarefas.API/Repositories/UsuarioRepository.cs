@@ -10,9 +10,14 @@ namespace SistemaGerenciamentoTarefas.API.Repositories {
             _context = context;
         }
 
-        public async Task<bool> EmailExisteAsync(string email) {
+        public async Task<List<Usuario>> BuscarTodosUsuariosAsync() {
 
-            return await _context.Usuarios.AnyAsync(u => u.Email == email);
+            return await _context.Usuarios.ToListAsync();
+        }
+
+        public async Task<Usuario?> BuscarUsuarioPorIdAsync(int id) {
+
+            return await _context.Usuarios.FindAsync(id);
         }
 
         public async Task<Usuario> AdicionarUsuarioAsync(Usuario usuario) {
@@ -21,6 +26,36 @@ namespace SistemaGerenciamentoTarefas.API.Repositories {
             await _context.SaveChangesAsync();
 
             return usuario;
+        }
+
+        public async Task<Usuario?> AtualizarUsuarioAsync(int id, Usuario usuarioAtualizado) {
+
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario == null) return null;
+
+            usuario.Nome = usuarioAtualizado.Nome;
+            usuario.Email = usuarioAtualizado.Email;
+            usuario.SenhaHash = usuarioAtualizado.SenhaHash;
+
+            await _context.SaveChangesAsync();
+            return usuario;
+        }
+
+        public async Task<bool> DeletarUsuarioAsync(int id) {
+
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario == null) return false;
+
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> EmailExisteAsync(string email) {
+
+            return await _context.Usuarios.AnyAsync(u => u.Email == email);
         }
     }
 }

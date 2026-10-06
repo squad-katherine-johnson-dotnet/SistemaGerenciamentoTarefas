@@ -3,7 +3,11 @@
 namespace SistemaGerenciamentoTarefas.API.Repositories {
     public interface IUsuarioRepository {
 
-        Task<bool> EmailExisteAsync(string email);
+        Task<List<Usuario>> BuscarTodosUsuariosAsync();
+        Task<Usuario?> BuscarUsuarioPorIdAsync(int id);
         Task<Usuario> AdicionarUsuarioAsync(Usuario usuario);
+        Task<Usuario?> AtualizarUsuarioAsync(int id, Usuario usuarioAtualizado);
+        Task<bool> DeletarUsuarioAsync(int id);
+        Task<bool> EmailExisteAsync(string email);
     }
 }

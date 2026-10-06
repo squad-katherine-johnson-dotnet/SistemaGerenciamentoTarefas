@@ -14,6 +14,12 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
             _usuarioService = usuarioService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> BuscarTodosAssync() {
+
+            var produtos = await _usuarioService.BuscarTodosAsync();
+            return Ok(produtos);
+        }
 
         [HttpPost]
         public async Task<IActionResult> AdicionarUsuarioAsync([FromBody] Usuario usuario) {
