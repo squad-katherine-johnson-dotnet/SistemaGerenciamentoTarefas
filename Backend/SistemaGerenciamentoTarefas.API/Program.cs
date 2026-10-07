@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SistemaGerenciamentoTarefas.API.Data;
+using SistemaGerenciamentoTarefas.API.DTOs;
 using SistemaGerenciamentoTarefas.API.Repositories;
 using SistemaGerenciamentoTarefas.API.Services;
 
@@ -12,6 +14,21 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
+builder.Services.Configure<ApiBehaviorOptions>(options => {
+    options.InvalidModelStateResponseFactory = context => {
+        var erros = context.ModelState
+            .Where(x => x.Value?.Errors.Count > 0)
+            .ToDictionary(x => x.Key, x => x.Value!.Errors.Select(e => e.ErrorMessage).ToArray());
+
+        var resposta = new RespostaPadraoDto {
+            Sucesso = false,
+            Mensagem = "Verifique os campos informados.",
+            Erros = erros
+        };
+
+        return new BadRequestObjectResult(resposta);
+    };
+});
 
 var app = builder.Build();
 

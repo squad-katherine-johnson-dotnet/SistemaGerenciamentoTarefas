@@ -19,32 +19,52 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
         public async Task<IActionResult> BuscarTodosUsuarios() {
 
             var usuarios = await _usuarioService.BuscarTodosUsuariosAsync();
-            return Ok(usuarios);
+
+            var resposta = new RespostaPadraoDto {
+                Sucesso = true,
+                Mensagem = "Usuários encontrados.",
+                Dados = usuarios
+            };
+
+            return Ok(resposta);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> BuscarUsuarioPorId(int id) {
 
             if (id <= 0) {
-                return BadRequest("O id deve ser maior que zero.");
+
+                var resposta = new RespostaPadraoDto {
+                    Sucesso = false,
+                    Mensagem = "O id deve ser maior que zero."
+                };
+
+                return BadRequest(resposta);
             }
 
             var usuario = await _usuarioService.BuscarUsuarioPorIdAsync(id);
 
             if (usuario == null) {
 
-                return NotFound($"Usuário com ID {id} não encontrado.");
+                var resposta = new RespostaPadraoDto {
+                    Sucesso = false,
+                    Mensagem = $"Usuário com ID {id} não encontrado."
+                };
+
+                return NotFound(resposta);
             }
 
-            return Ok(usuario);
+            var respostaSucesso = new RespostaPadraoDto {
+                Sucesso = true,
+                Mensagem = "Usuário encontrado.",
+                Dados = usuario
+            };
+
+            return Ok(respostaSucesso);
         }
 
         [HttpPost]
         public async Task<IActionResult> CadastrarUsuario([FromBody] UsuarioCadastroDto usuarioDto) {
-
-            if (!ModelState.IsValid) {
-                return BadRequest(ModelState);
-            }
 
             try {
 
@@ -56,10 +76,22 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
                     Email = usuarioCriado.Email
                 };
 
-                return CreatedAtAction(nameof(BuscarUsuarioPorId), new { id = usuarioCriado.Id }, resposta);
+                var respostaPadrao = new RespostaPadraoDto {
+                    Sucesso = true,
+                    Mensagem = "Usuário cadastrado com sucesso.",
+                    Dados = resposta
+                };
+
+                return CreatedAtAction(nameof(BuscarUsuarioPorId), new { id = usuarioCriado.Id }, respostaPadrao);
             }
             catch (ArgumentException ex) {
-                return Conflict(ex.Message);
+
+                var resposta = new RespostaPadraoDto {
+                    Sucesso = false,
+                    Mensagem = ex.Message
+                };
+
+                return Conflict(resposta);
             }
         }
 
@@ -67,24 +99,42 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
         public async Task<IActionResult> AtualizarUsuario(int id, [FromBody] UsuarioAtualizacaoDto usuarioAtualizado) {
 
             if (id <= 0) {
-                return BadRequest("O id deve ser maior que zero.");
-            }
+                var resposta = new RespostaPadraoDto {
+                    Sucesso = false,
+                    Mensagem = "O id deve ser maior que zero."
+                };
 
-            if (!ModelState.IsValid) {
-                return BadRequest(ModelState);
+                return BadRequest(resposta);
             }
 
             try {
                 var usuario = await _usuarioService.AtualizarUsuarioAsync(id, usuarioAtualizado);
 
                 if (usuario == null) {
-                    return NotFound($"Usuário com ID {id} não encontrado.");
+                    var resposta = new RespostaPadraoDto {
+                        Sucesso = false,
+                        Mensagem = $"Usuário com ID {id} não encontrado."
+                    };
+
+                    return NotFound(resposta);
                 }
 
-                return Ok(usuario);
+                var respostaSucesso = new RespostaPadraoDto {
+                    Sucesso = true,
+                    Mensagem = "Usuário atualizado com sucesso.",
+                    Dados = usuario
+                };
+
+                return Ok(respostaSucesso);
             }
             catch (ArgumentException ex) {
-                return Conflict(ex.Message);
+
+                var resposta = new RespostaPadraoDto {
+                    Sucesso = false,
+                    Mensagem = ex.Message
+                };
+
+                return Conflict(resposta);
             }
         }
 
@@ -93,16 +143,33 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
         public async Task<IActionResult> DeletarUsuario(int id) {
 
             if (id <= 0) {
-                return BadRequest("O id deve ser maior que zero.");
+
+                var resposta = new RespostaPadraoDto {
+                    Sucesso = false,
+                    Mensagem = "O id deve ser maior que zero."
+                };
+
+                return BadRequest(resposta);
             }
 
             var removido = await _usuarioService.DeletarUsuarioAsync(id);
 
             if (!removido) {
-                return NotFound($"Usuário com ID {id} não encontrado.");
+
+                var resposta = new RespostaPadraoDto {
+                    Sucesso = false,
+                    Mensagem = $"Usuário com ID {id} não encontrado."
+                };
+
+                return NotFound(resposta);
             }
 
-            return NoContent();
+            var respostaSucesso = new RespostaPadraoDto {
+                Sucesso = true,
+                Mensagem = "Usuário excluído com sucesso."
+            };
+
+            return Ok(respostaSucesso);
         }
     }
 }
