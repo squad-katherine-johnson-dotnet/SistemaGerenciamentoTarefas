@@ -13,14 +13,30 @@ namespace SistemaGerenciamentoTarefas.API.Services {
             _passwordHasher = new PasswordHasher<Usuario>();
         }
 
-        public async Task<List<Usuario>> BuscarTodosUsuariosAsync() {
+        public async Task<List<UsuarioRespostaDto>> BuscarTodosUsuariosAsync() {
 
-            return await _usuarioRepository.BuscarTodosUsuariosAsync();
+            var usuarios = await _usuarioRepository.BuscarTodosUsuariosAsync();
+
+            return usuarios.Select(usuario => new UsuarioRespostaDto {
+                Id = usuario.Id,
+                Nome = usuario.Nome,
+                Email = usuario.Email
+            }).ToList();
         }
 
-        public async Task<Usuario?> BuscarUsuarioPorIdAsync(int id) {
+        public async Task<UsuarioRespostaDto?> BuscarUsuarioPorIdAsync(int id) {
 
-            return await _usuarioRepository.BuscarUsuarioPorIdAsync(id);
+            var usuario = await _usuarioRepository.BuscarUsuarioPorIdAsync(id);
+
+            if (usuario == null) {
+                return null;
+            }
+
+            return new UsuarioRespostaDto {
+                Id = usuario.Id,
+                Nome = usuario.Nome,
+                Email = usuario.Email
+            };
         }
 
         public async Task<Usuario> CadastrarUsuarioAsync(UsuarioCadastroDto usuarioDto) {

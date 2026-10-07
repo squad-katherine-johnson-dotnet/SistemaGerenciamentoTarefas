@@ -32,6 +32,7 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
             var usuario = await _usuarioService.BuscarUsuarioPorIdAsync(id);
 
             if (usuario == null) {
+
                 return NotFound($"Usuário com ID {id} não encontrado.");
             }
 
