@@ -55,13 +55,31 @@ namespace SistemaGerenciamentoTarefas.API.Services {
             return await _usuarioRepository.CadastrarUsuarioAsync(usuario);
         }
 
-        public async Task<Usuario?> AtualizarUsuarioAsync(int id, Usuario usuarioAtualizado) {
+        public async Task<UsuarioRespostaDto?> AtualizarUsuarioAsync(int id, UsuarioAtualizacaoDto usuarioAtualizado) {
 
-            if (await _usuarioRepository.EmailExisteAsync(usuarioAtualizado.Email)) {
+            if (await _usuarioRepository.EmailExisteAsync(usuarioAtualizado.Email, id)) {
                 throw new ArgumentException("E-mail já cadastrado.");
             }
 
-            return await _usuarioRepository.AtualizarUsuarioAsync(id, usuarioAtualizado);
+            var usuario = new Usuario {
+                Id = id,
+                Nome = usuarioAtualizado.Nome,
+                Email = usuarioAtualizado.Email
+            };
+
+            usuario.SenhaHash = _passwordHasher.HashPassword(usuario, usuarioAtualizado.Senha);
+
+            var usuarioAtualizadoResult = await _usuarioRepository.AtualizarUsuarioAsync(id, usuario);
+
+            if (usuarioAtualizadoResult == null) {
+                return null;
+            }
+
+            return new UsuarioRespostaDto {
+                Id = usuarioAtualizadoResult.Id,
+                Nome = usuarioAtualizadoResult.Nome,
+                Email = usuarioAtualizadoResult.Email
+            };
         }
 
         public async Task<bool> DeletarUsuarioAsync(int id) {

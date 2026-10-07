@@ -64,7 +64,7 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
         }
 
         [HttpPut]
-        public async Task<IActionResult> AtualizarUsuario(int id, [FromBody] Usuario usuarioAtualizado) {
+        public async Task<IActionResult> AtualizarUsuario(int id, [FromBody] UsuarioAtualizacaoDto usuarioAtualizado) {
 
             if (id <= 0) {
                 return BadRequest("O id deve ser maior que zero.");
@@ -81,10 +81,10 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
                     return NotFound($"Usuário com ID {id} não encontrado.");
                 }
 
-                return Ok($"Usuário '{usuario.Nome}' atualizado com sucesso!");
+                return Ok(usuario);
             }
             catch (ArgumentException ex) {
-                return BadRequest(ex.Message);
+                return Conflict(ex.Message);
             }
         }
 

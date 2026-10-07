@@ -6,7 +6,7 @@ namespace SistemaGerenciamentoTarefas.API.Services {
         Task<List<UsuarioRespostaDto>> BuscarTodosUsuariosAsync();
         Task<UsuarioRespostaDto?> BuscarUsuarioPorIdAsync(int id);
         Task<Usuario> CadastrarUsuarioAsync(UsuarioCadastroDto usuarioDto);
-        Task<Usuario?> AtualizarUsuarioAsync(int id, Usuario usuarioAtualizado);
+        Task<UsuarioRespostaDto?> AtualizarUsuarioAsync(int id, UsuarioAtualizacaoDto usuarioAtualizado);
         Task<bool> DeletarUsuarioAsync(int id);
     }
 }
