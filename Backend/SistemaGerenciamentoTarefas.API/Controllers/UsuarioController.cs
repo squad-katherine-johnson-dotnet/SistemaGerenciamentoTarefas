@@ -6,7 +6,7 @@ using SistemaGerenciamentoTarefas.API.DTOs;
 namespace SistemaGerenciamentoTarefas.API.Controllers {
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/usuarios")]
     public class UsuarioController : ControllerBase {
 
         private readonly IUsuarioService _usuarioService;
