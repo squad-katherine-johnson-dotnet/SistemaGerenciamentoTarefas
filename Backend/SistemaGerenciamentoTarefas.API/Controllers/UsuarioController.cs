@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaGerenciamentoTarefas.API.Models;
 using SistemaGerenciamentoTarefas.API.Services;
+using SistemaGerenciamentoTarefas.API.DTOs;
 
 namespace SistemaGerenciamentoTarefas.API.Controllers {
 
@@ -38,7 +39,7 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> CadastrarUsuario([FromBody] Usuario usuario) {
+        public async Task<IActionResult> CadastrarUsuario([FromBody] UsuarioCadastroDto usuarioDto) {
 
             if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
@@ -46,12 +47,18 @@ namespace SistemaGerenciamentoTarefas.API.Controllers {
 
             try {
 
-                var usuarioCriado = await _usuarioService.CadastrarUsuarioAsync(usuario);
+                var usuarioCriado = await _usuarioService.CadastrarUsuarioAsync(usuarioDto);
 
-                return CreatedAtAction(nameof(BuscarUsuarioPorId), new { id = usuarioCriado.Id }, usuarioCriado);
+                var resposta = new UsuarioRespostaDto {
+                    Id = usuarioCriado.Id,
+                    Nome = usuarioCriado.Nome,
+                    Email = usuarioCriado.Email
+                };
+
+                return CreatedAtAction(nameof(BuscarUsuarioPorId), new { id = usuarioCriado.Id }, resposta);
             }
             catch (ArgumentException ex) {
-                return BadRequest(ex.Message);
+                return Conflict(ex.Message);
             }
         }
 
