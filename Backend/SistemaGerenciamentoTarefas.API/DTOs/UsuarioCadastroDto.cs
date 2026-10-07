@@ -1,18 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SistemaGerenciamentoTarefas.API.Models {
-    public class Usuario {
-
-        public int Id { get; set; }
+namespace SistemaGerenciamentoTarefas.API.DTOs {
+    public class UsuarioCadastroDto {
 
         [Required]
         public string Nome { get; set; }
 
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]
-        public string SenhaHash { get; set; }
-
+        public string Senha { get; set; }
     }
 }
+
