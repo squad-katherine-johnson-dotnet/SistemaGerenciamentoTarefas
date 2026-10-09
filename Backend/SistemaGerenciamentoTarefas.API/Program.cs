@@ -6,6 +6,52 @@ using SistemaGerenciamentoTarefas.API.Repositories;
 using SistemaGerenciamentoTarefas.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next(context);
+    }
+    catch (Exception ex)
+    {
+        if (context.Response.HasStarted)
+        {
+            throw;
+        }
+
+        int status;
+        string mensagem;
+
+        if (ex is KeyNotFoundException)
+        {
+            status = 404;
+            mensagem = ex.Message;
+        }
+        else if (ex is ArgumentException)
+        {
+            status = 400;
+            mensagem = ex.Message;
+        }
+        else
+        {
+            status = 500;
+            mensagem = "Ocorreu um erro interno. Tente novamente.";
+
+            app.Logger.LogError(ex, "Erro inesperado na API.");
+        }
+
+        context.Response.Clear();
+        context.Response.StatusCode = status;
+
+        await context.Response.WriteAsJsonAsync(new RespostaPadraoDto
+        {
+            Sucesso = false,
+            Mensagem = mensagem
+        });
+    }
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -13,6 +59,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<ITarefaRepository, TarefaRepository>();
+builder.Services.AddScoped<ITarefaService, TarefaService>();
+
 
 builder.Services.Configure<ApiBehaviorOptions>(options => {
     options.InvalidModelStateResponseFactory = context => {
@@ -39,7 +88,6 @@ builder.Services.AddCors(options => {
     });
 });
 
-var app = builder.Build();
 
 if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
