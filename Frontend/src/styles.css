@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --mistyrose: #FFE4E1;
+  --lavender: #E6E6FA;
+  --thistle: #D8BFD8;
+  --powderblue: #B0E0E6;
+  --text-color: #333333;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--lavender);
+  color: var(--text-color);
+  margin: 0;
+  padding: 20px;
+}
