@@ -1,0 +1,107 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.card-cadastro {
+  background-color: #ffffff;
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
+  border-top: 6px solid #C8A2C8;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.3rem;
+}
+
+label {
+  margin-bottom: 0.5rem;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 10px;
+  outline: none;
+  background-color: #FAFAFA;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  background-color: #ffffff;
+  border-color: #C8A2C8;
+  box-shadow: 0 0 0 3px rgba(200, 162, 200, 0.2);
+}
+
+input::placeholder {
+  color: #9CA3AF;
+}
+
+button {
+  width: 100%;
+  padding: 0.95rem;
+  background-color: #D1B3C4;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 0.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  background-color: #C29EB4;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.erro {
+  color: #e53935;
+  font-size: 0.82rem;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.feedback {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.mensagem-sucesso {
+  color: #2e7d32;
+}
+
+.mensagem-erro {
+  color: #d32f2f;
+}

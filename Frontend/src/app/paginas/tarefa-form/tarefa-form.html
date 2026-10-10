@@ -1,0 +1,57 @@
+<div class="card-tarefa">
+  <h2>{{ isEdicao ? 'Editar Tarefa' : 'Nova Tarefa' }}</h2>
+
+  <p class="mensagem" *ngIf="mensagemFeedback" [ngClass]="{'erro': isErro, 'sucesso': !isErro}">
+    {{ mensagemFeedback }}
+  </p>
+
+  <form [formGroup]="tarefaForm" (ngSubmit)="onSubmit()">
+    
+    <!-- Título -->
+    <div class="campo">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" formControlName="titulo" placeholder="Digite o título da tarefa">
+      
+      <small class="erro" *ngIf="tarefaForm.get('titulo')?.touched && tarefaForm.get('titulo')?.hasError('required')">
+        O título é obrigatório.
+      </small>
+      <small class="erro" *ngIf="tarefaForm.get('titulo')?.touched && tarefaForm.get('titulo')?.hasError('minlength')">
+        O título deve ter no mínimo 3 caracteres.
+      </small>
+    </div>
+
+    <!-- Descrição -->
+    <div class="campo">
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" formControlName="descricao" rows="4" placeholder="Descreva os detalhes da tarefa"></textarea>      
+      <small class="erro" *ngIf="tarefaForm.get('descricao')?.touched && tarefaForm.get('descricao')?.hasError('required')">
+        A descrição é obrigatória.
+      </small>
+    </div>
+
+    <!-- Data de Vencimento -->
+    <div class="campo">
+      <label for="dataVencimento">Data de Vencimento</label>
+      <input id="dataVencimento" type="date" formControlName="dataVencimento">
+      
+      <small class="erro" *ngIf="tarefaForm.get('dataVencimento')?.touched && tarefaForm.get('dataVencimento')?.hasError('required')">
+        A data é obrigatória.
+      </small>
+    </div>
+
+    <!-- Status -->
+    <div class="campo">
+      <label for="status">Status</label>
+      <select id="status" formControlName="status">
+        <option value="Pendente">Pendente</option>
+        <option value="EmAndamento">Em Andamento</option>
+        <option value="Concluida">Concluída</option>
+      </select>
+    </div>
+
+    <!-- Botão de Ação -->
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Guardando...' : (isEdicao ? 'Atualizar Tarefa' : 'Criar Tarefa') }}
+    </button>
+  </form>
+</div>
