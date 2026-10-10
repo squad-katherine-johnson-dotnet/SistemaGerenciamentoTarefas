@@ -1,65 +1,107 @@
-.card-container {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 30px;
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.card-cadastro {
   background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  border-top: 6px solid var(--thistle);
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
+  border-top: 6px solid #C8A2C8;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 440px;
+  box-sizing: border-box;
 }
 
 h2 {
-  color: #4A4A4A;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
-.form-group {
-  margin-bottom: 18px;
+.campo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.3rem;
 }
 
 label {
-  display: block;
-  margin-bottom: 6px;
+  margin-bottom: 0.5rem;
+  color: #374151;
   font-weight: 600;
-  color: #555;
+  font-size: 0.95rem;
 }
 
 input {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--lavender);
-  border-radius: 8px;
-  box-sizing: border-box;
+  padding: 0.85rem 1rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 10px;
+  outline: none;
   background-color: #FAFAFA;
-  font-size: 14px;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
 }
 
 input:focus {
-  outline: none;
-  border-color: var(--powderblue);
-  background-color: #FFFFFF;
+  background-color: #ffffff;
+  border-color: #C8A2C8;
+  box-shadow: 0 0 0 3px rgba(200, 162, 200, 0.2);
+}
+
+input::placeholder {
+  color: #9CA3AF;
 }
 
 button {
   width: 100%;
-  padding: 12px;
-  background-color: var(--thistle);
-  color: #333;
+  padding: 0.95rem;
+  background-color: #D1B3C4;
+  color: #1a1a1a;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.3s;
+  margin-top: 0.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
 }
 
-button:hover {
-  background-color: var(--mistyrose);
+button:hover:not(:disabled) {
+  background-color: #C29EB4;
 }
 
-.mensagem {
-  margin-top: 15px;
-  text-align: center;
-  color: #2e7d32;
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.erro {
+  color: #e53935;
+  font-size: 0.82rem;
+  margin-top: 5px;
   font-weight: 500;
+}
+
+.feedback {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.mensagem-sucesso {
+  color: #2e7d32;
+}
+
+.mensagem-erro {
+  color: #d32f2f;
 }

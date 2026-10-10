@@ -1,24 +1,56 @@
-<div class="card-container">
+<div class="card-cadastro">
   <h2>Cadastro de Usuária</h2>
   
-  <form (ngSubmit)="onSubmit()">
-    <div class="form-group">
+  <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()">
+
+    <div class="campo">
       <label for="nome">Nome</label>
-      <input type="text" id="nome" [(ngModel)]="usuario.nome" name="nome" required placeholder="Digite seu nome completo">
+      <input id="nome" type="text" formControlName="nome" placeholder="Digite seu nome completo">
+      
+      <small class="erro" *ngIf="cadastroForm.get('nome')?.touched && cadastroForm.get('nome')?.hasError('required')">
+        O nome é obrigatório.
+      </small>
+      <small class="erro" *ngIf="cadastroForm.get('nome')?.touched && cadastroForm.get('nome')?.hasError('minlength')">
+        O nome deve ter no mínimo 3 caracteres.
+      </small>
+      <small class="erro" *ngIf="cadastroForm.get('nome')?.touched && cadastroForm.get('nome')?.hasError('maxlength')">
+        O nome deve ter no máximo 100 caracteres.
+      </small>
+      <small class="erro" *ngIf="cadastroForm.get('nome')?.touched && cadastroForm.get('nome')?.hasError('pattern')">
+        O nome deve conter apenas letras e espaços.
+      </small>
     </div>
 
-    <div class="form-group">
-      <label for="email">E-mail</label>
-      <input type="email" id="email" [(ngModel)]="usuario.email" name="email" required placeholder="seu.email@exemplo.com">
-    </div>
+    <div class="campo">
+  <label for="email">E-mail</label>
+  <input 
+    id="email" 
+    type="email" 
+    formControlName="email" 
+    placeholder="seu.email@exemplo.com">
+  
+  <small class="erro" *ngIf="cadastroForm.get('email')?.touched && cadastroForm.get('email')?.hasError('required')">
+    O e-mail é obrigatório.
+  </small>
+  <small class="erro" *ngIf="cadastroForm.get('email')?.touched && cadastroForm.get('email')?.hasError('email')">
+    Informe um e-mail válido.
+  </small>
+</div>
 
-    <div class="form-group">
+    <div class="campo">
       <label for="senha">Senha</label>
-      <input type="password" id="senha" [(ngModel)]="usuario.senha" name="senha" required placeholder="Sua senha">
+      <input id="senha" type="password" formControlName="senha" placeholder="Sua senha">
+      <small class="erro" *ngIf="cadastroForm.get('senha')?.touched && cadastroForm.get('senha')?.invalid">
+        A senha deve ter no mínimo 6 caracteres.
+      </small>
     </div>
 
-    <button type="submit">Cadastrar</button>
-  </form>
+    <button type="submit" [disabled]="cadastroForm.invalid || loading">
+      {{ loading ? 'Cadastrando...' : 'Cadastrar' }}
+    </button>
 
-  <p *ngIf="mensagem" class="mensagem">{{ mensagem }}</p>
+    <p *ngIf="mensagemFeedback" [class.mensagem-sucesso]="!isErro" [class.mensagem-erro]="isErro" class="feedback">
+      {{ mensagemFeedback }}
+    </p>
+  </form>
 </div>
