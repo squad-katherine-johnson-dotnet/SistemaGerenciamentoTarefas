@@ -39,16 +39,16 @@
       </small>
     </div>
 
-    <!-- Status -->
+        <!-- Status -->
     <div class="campo">
       <label for="status">Status</label>
-      <select id="status" formControlName="status">
-        <option value="Pendente">Pendente</option>       
-        <option value="Concluida">Concluída</option>
+      <select id="status" formControlName="statusTarefa">
+        <option [ngValue]="0">Pendente</option>
+        <option [ngValue]="1">Concluída</option>
       </select>
     </div>
 
-    <!-- Botão de Ação -->
+      <!-- Botão de Ação -->
     <button type="submit" [disabled]="loading">
       {{ loading ? 'Guardando...' : (isEdicao ? 'Atualizar Tarefa' : 'Criar Tarefa') }}
     </button>
