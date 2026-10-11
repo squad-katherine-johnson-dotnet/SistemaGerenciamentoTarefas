@@ -3,5 +3,5 @@ export interface Tarefa {
   titulo: string;
   descricao: string;
   dataVencimento: string;
-  status: 'Pendente' | 'Concluida';
+  status: '0' | '1';
 }
