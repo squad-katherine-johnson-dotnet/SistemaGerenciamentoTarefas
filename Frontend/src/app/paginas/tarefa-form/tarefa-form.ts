@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +16,7 @@ export class TarefaFormComponent implements OnInit {
   private tarefaService = inject(TarefaService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private cd = inject(ChangeDetectorRef);
 
   tarefaForm!: FormGroup;
   isEdicao: boolean = false;
@@ -39,7 +40,7 @@ export class TarefaFormComponent implements OnInit {
       titulo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       descricao: ['', [Validators.required, Validators.maxLength(500)]],
       dataVencimento: ['', [Validators.required]],
-      status: ['Pendente', [Validators.required]]
+      statusTarefa: [0, [Validators.required]]
     });
     
     if (this.isEdicao && this.tarefaId) {
@@ -58,14 +59,16 @@ export class TarefaFormComponent implements OnInit {
             titulo: tarefa.titulo,
             descricao: tarefa.descricao,
             dataVencimento: tarefa.dataVencimento ? tarefa.dataVencimento.split('T')[0] : '',
-            status: tarefa.status
+            statusTarefa: tarefa.statusTarefa !== undefined ? Number(tarefa.statusTarefa) : (tarefa.status === 'Concluida' || tarefa.status === 'Concluída' ? 1 : 0)
           });
         }
+        this.cd.detectChanges();
       },
       error: (err) => {
         this.loading = false;
         this.isErro = true;
         this.mensagemFeedback = 'Erro ao carregar dados da tarefa.';
+        this.cd.detectChanges(); 
       }
     });
   }
@@ -79,8 +82,10 @@ export class TarefaFormComponent implements OnInit {
     this.loading = true;
     this.mensagemFeedback = '';
 
+    const formValues = this.tarefaForm.value;
     const dadosTarefa = {
-      ...this.tarefaForm.value
+      ...formValues,
+      statusTarefa: Number(formValues.statusTarefa)
     };
 
     if (this.isEdicao && this.tarefaId) {
@@ -89,11 +94,13 @@ export class TarefaFormComponent implements OnInit {
           this.loading = false;
           this.mensagemFeedback = 'Tarefa atualizada com sucesso!';
           this.isErro = false;
+          this.cd.detectChanges();
         },
         error: (err) => {
           this.loading = false;
           this.isErro = true;
           this.mensagemFeedback = 'Erro ao atualizar tarefa.';
+          this.cd.detectChanges();
         }
       });
     } else {
@@ -102,12 +109,14 @@ export class TarefaFormComponent implements OnInit {
           this.loading = false;
           this.mensagemFeedback = 'Tarefa criada com sucesso!';
           this.isErro = false;
-          this.tarefaForm.reset({ status: 'Pendente' });
+          this.tarefaForm.reset({ statusTarefa: 0 });
+          this.cd.detectChanges();
         },
         error: (err) => {
           this.loading = false;
           this.isErro = true;
           this.mensagemFeedback = 'Erro ao criar tarefa.';
+          this.cd.detectChanges();
         }
       });
     }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,6 +15,7 @@ export class CadastroComponent {
   private fb = inject(FormBuilder);
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
+  private cd = inject(ChangeDetectorRef);
 
   mensagemFeedback: string = '';
   isErro: boolean = false;
@@ -44,14 +45,20 @@ export class CadastroComponent {
         this.mensagemFeedback = 'Cadastro realizado com sucesso!';
         this.isErro = false;
 
+        this.cadastroForm.reset();  
+        this.cd.detectChanges();
+
         setTimeout(() => {
+          this.mensagemFeedback = '';
+          this.cd.detectChanges();
           this.router.navigate(['/tarefas', res.dados.id]);
-        }, 1500);
+        }, 2000);
       },
       error: (err: any) => {
         this.loading = false;
         this.mensagemFeedback = 'Erro ao realizar cadastro. Tente novamente.';
-        this.isErro = true;        
+        this.isErro = true;
+        this.cd.detectChanges(); // Força a atualização da view para refletir as mudanças        
       }
     });
   }
