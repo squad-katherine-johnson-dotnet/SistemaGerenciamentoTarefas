@@ -44,20 +44,14 @@ export class CadastroComponent {
         this.mensagemFeedback = 'Cadastro realizado com sucesso!';
         this.isErro = false;
 
-        // Redireciona de forma segura após cadastrar
         setTimeout(() => {
-          this.router.navigate(['/cadastro']);
-        }, 1000);
+          this.router.navigate(['/tarefas', res.dados.id]);
+        }, 1500);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.loading = false;
-        this.isErro = true;
-
-        if (err.status === 409) {
-          this.mensagemFeedback = 'E-mail já cadastrado no sistema.';
-        } else {
-          this.mensagemFeedback = err.error?.mensagem || 'Erro ao realizar cadastro.';
-        }
+        this.mensagemFeedback = 'Erro ao realizar cadastro. Tente novamente.';
+        this.isErro = true;        
       }
     });
   }
