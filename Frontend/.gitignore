@@ -46,3 +46,4 @@ Thumbs.db
 # Angular dentro de SistemaGerenciamentoTarefas.Web
 /SistemaGerenciamentoTarefas.Web/node_modules/
 /SistemaGerenciamentoTarefas.Web/.angular/cache/
+/SistemaGerenciamentoTarefas.Web/dist/
