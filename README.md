@@ -38,6 +38,24 @@ Na raiz do repositório, acesse a pasta da API:
 ```bash
 cd Backend/SistemaGerenciamentoTarefas.API
 ```
+Restaure as dependências do projeto:
+
+```bash
+dotnet restore
+```
+
+Instale a ferramenta EF Core, caso ainda não esteja instalada:
+
+```bash
+dotnet tool install --global dotnet-ef
+```
+Se a ferramenta já estiver instalada, esse passo pode ser ignorado.
+
+Crie ou atualize o banco de dados:
+
+```bash
+dotnet ef database update
+```
 
 Execute a aplicação:
 
