@@ -3,5 +3,6 @@ export interface Tarefa {
   titulo: string;
   descricao: string;
   dataVencimento: string;
-  status: '0' | '1';
+  statusTarefa: number;
+  usuarioId?: number;
 }
