@@ -22,10 +22,13 @@ export class CadastroComponent {
   loading: boolean = false;
 
   cadastroForm: FormGroup = this.fb.group({
-    nome: ['', [Validators.required,
-     Validators.minLength(3),
-     Validators.maxLength(100),
-     Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/)]], // Validação para permitir apenas letras (com acentos) e espaços
+    nome: ['', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(100),
+      Validators.pattern(/^(?=.*[A-Za-zÀ-ÖØ-öø-ÿ])[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/)
+    ]],
+
     email: ['', [Validators.required, Validators.email]],
     senha: ['', [Validators.required, Validators.minLength(6)]]
   });
@@ -45,7 +48,7 @@ export class CadastroComponent {
         this.mensagemFeedback = 'Cadastro realizado com sucesso!';
         this.isErro = false;
 
-        this.cadastroForm.reset();  
+        this.cadastroForm.reset();
         this.cd.detectChanges();
 
         setTimeout(() => {
@@ -54,12 +57,21 @@ export class CadastroComponent {
           this.router.navigate(['/tarefas', res.dados.id]);
         }, 2000);
       },
+
       error: (err: any) => {
         this.loading = false;
-        this.mensagemFeedback = 'Erro ao realizar cadastro. Tente novamente.';
         this.isErro = true;
-        this.cd.detectChanges(); // Força a atualização da view para refletir as mudanças        
+
+        if (err.status === 409) {
+          this.mensagemFeedback = 'Este e-mail já está cadastrado.';
+        } else {
+          this.mensagemFeedback =
+            err.error?.mensagem ?? 'Erro ao realizar cadastro. Tente novamente.';
+        }
+
+        this.cd.detectChanges();
       }
+
     });
   }
 }

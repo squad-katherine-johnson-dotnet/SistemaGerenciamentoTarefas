@@ -8,48 +8,36 @@
       </p>
     </div>
 
-    <button
-      type="button"
-      class="botao botao-principal"
-      (click)="novaTarefa()"
-    >
+    <button type="button"
+            class="botao botao-principal"
+            (click)="novaTarefa()">
       <span aria-hidden="true">+</span>
       Nova tarefa
     </button>
   </header>
 
-  <p
-    *ngIf="mensagemFeedback && !isErro"
-    class="aviso aviso-sucesso"
-    role="status"
-  >
+  <p *ngIf="mensagemFeedback && !isErro"
+     class="aviso aviso-sucesso"
+     role="status">
     {{ mensagemFeedback }}
   </p>
 
-  <p
-    *ngIf="mensagemFeedback && isErro"
-    class="aviso aviso-erro"
-    role="alert"
-  >
+  <p *ngIf="mensagemFeedback && isErro"
+     class="aviso aviso-erro"
+     role="alert">
     {{ mensagemFeedback }}
   </p>
 
-  <section
-    *ngIf="loading"
-    class="estado-lista"
-    aria-live="polite"
-  >
-    <span
-      class="indicador-carregamento"
-      aria-hidden="true"
-    ></span>
+  <section *ngIf="loading"
+           class="estado-lista"
+           aria-live="polite">
+    <span class="indicador-carregamento"
+          aria-hidden="true"></span>
     <p>Carregando suas tarefas...</p>
   </section>
 
-  <section
-    *ngIf="!loading && !isErro && tarefas.length === 0"
-    class="estado-lista estado-vazio"
-  >
+  <section *ngIf="!loading && !isErro && tarefas.length === 0"
+           class="estado-lista estado-vazio">
     <div class="icone-vazio" aria-hidden="true">✓</div>
 
     <h2>Nenhuma tarefa por aqui</h2>
@@ -59,36 +47,26 @@
       Que tal adicionar a primeira?
     </p>
 
-    <button
-      type="button"
-      class="botao botao-principal"
-      (click)="novaTarefa()"
-    >
+    <button type="button"
+            class="botao botao-principal"
+            (click)="novaTarefa()">
       Criar primeira tarefa
     </button>
   </section>
 
-  <section
-    *ngIf="!loading && tarefas.length > 0"
-    class="lista-tarefas"
-    aria-label="Lista de tarefas"
-  >
-    <article
-      class="cartao-tarefa"
-      *ngFor="let tarefa of tarefas"
-    >
+  <section *ngIf="!loading && tarefas.length > 0"
+           class="lista-tarefas"
+           aria-label="Lista de tarefas">
+    <article class="cartao-tarefa"
+             *ngFor="let tarefa of tarefas">
       <div class="conteudo-tarefa">
         <div class="linha-titulo">
-          <h2
-            [class.titulo-concluido]="estaConcluida(tarefa)"
-          >
+          <h2 [class.titulo-concluido]="estaConcluida(tarefa)">
             {{ tarefa.titulo }}
           </h2>
 
-          <span
-            class="etiqueta-status"
-            [class.status-concluido]="estaConcluida(tarefa)"
-          >
+          <span class="etiqueta-status"
+                [class.status-concluido]="estaConcluida(tarefa)">
             {{ textoStatus(tarefa) }}
           </span>
         </div>
@@ -105,29 +83,67 @@
       </div>
 
       <div class="acoes-tarefa">
-        <button
-          type="button"
-          class="botao botao-secundario"
-          (click)="editarTarefa(tarefa)"
-        >
+        <button type="button"
+                class="botao botao-secundario"
+                (click)="editarTarefa(tarefa)">
           Editar
         </button>
-        <button
-          type="button"
-          class="botao botao-concluir"
-          [disabled]="estaConcluida(tarefa)"
-          (click)="concluirTarefa(tarefa)"
-        >
-          {{ estaConcluida(tarefa) ? 'Concluída' : 'Concluir' }}
+
+        <button *ngIf="!estaConcluida(tarefa)"
+                type="button"
+                class="botao botao-concluir"
+                (click)="concluirTarefa(tarefa)">
+          Concluir
         </button>
-        <button
-          type="button"
-          class="botao botao-excluir"
-          (click)="excluirTarefa(tarefa)"
-        >
+
+        <button *ngIf="estaConcluida(tarefa)"
+                type="button"
+                class="botao botao-concluir"
+                (click)="reabrirTarefa(tarefa)">
+          Não concluída
+        </button>
+
+        <button type="button"
+                class="botao botao-excluir"
+                (click)="excluirTarefa(tarefa)">
           Excluir
         </button>
       </div>
     </article>
   </section>
+
+  <div *ngIf="mostrarConfirmacaoExclusao && tarefaParaExcluir"
+       class="fundo-modal"
+       (click)="cancelarExclusao()">
+    <section class="modal-confirmacao"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="titulo-confirmacao"
+             (click)="$event.stopPropagation()">
+      <div class="icone-confirmacao" aria-hidden="true">!</div>
+
+      <h2 id="titulo-confirmacao">Excluir tarefa?</h2>
+
+      <p>
+        Deseja realmente excluir a tarefa
+        <strong>{{ tarefaParaExcluir.titulo }}</strong>?
+        Essa ação não pode ser desfeita.
+      </p>
+
+      <div class="acoes-modal">
+        <button type="button"
+                class="botao botao-secundario"
+                (click)="cancelarExclusao()">
+          Cancelar
+        </button>
+
+        <button type="button"
+                class="botao botao-excluir"
+                (click)="confirmarExclusao()">
+          Excluir
+        </button>
+      </div>
+    </section>
+  </div>
+
 </main>

@@ -6,40 +6,54 @@
   </p>
 
   <form [formGroup]="tarefaForm" (ngSubmit)="onSubmit()">
-    
+
     <!-- Título -->
     <div class="campo">
       <label for="titulo">Título</label>
       <input id="titulo" type="text" formControlName="titulo" placeholder="Digite o título da tarefa">
-      
+
       <small class="erro" *ngIf="tarefaForm.get('titulo')?.touched && tarefaForm.get('titulo')?.hasError('required')">
         O título é obrigatório.
       </small>
       <small class="erro" *ngIf="tarefaForm.get('titulo')?.touched && tarefaForm.get('titulo')?.hasError('minlength')">
         O título deve ter no mínimo 3 caracteres.
       </small>
+      <small class="erro" *ngIf="tarefaForm.get('titulo')?.touched && tarefaForm.get('titulo')?.hasError('maxlength')">
+        O título deve ter no máximo 100 caracteres.
+      </small>
+      <small class="erro" *ngIf="tarefaForm.get('titulo')?.touched && tarefaForm.get('titulo')?.hasError('pattern')">
+        O título não pode conter apenas espaços em branco.
+      </small>
+
     </div>
 
     <!-- Descrição -->
     <div class="campo">
       <label for="descricao">Descrição</label>
-      <textarea id="descricao" formControlName="descricao" rows="4" placeholder="Descreva os detalhes da tarefa"></textarea>      
+      <textarea id="descricao" formControlName="descricao" rows="4" placeholder="Descreva os detalhes da tarefa"></textarea>
       <small class="erro" *ngIf="tarefaForm.get('descricao')?.touched && tarefaForm.get('descricao')?.hasError('required')">
         A descrição é obrigatória.
       </small>
+      <small class="erro" *ngIf="tarefaForm.get('descricao')?.touched && tarefaForm.get('descricao')?.hasError('maxlength')">
+        A descrição deve ter no máximo 500 caracteres.
+      </small>
+      <small class="erro" *ngIf="tarefaForm.get('descricao')?.touched && tarefaForm.get('descricao')?.hasError('pattern')">
+        A descrição não pode conter apenas espaços em branco.
+      </small>
+
     </div>
 
     <!-- Data de Vencimento -->
     <div class="campo">
       <label for="dataVencimento">Data de Vencimento</label>
       <input id="dataVencimento" type="date" formControlName="dataVencimento">
-      
+
       <small class="erro" *ngIf="tarefaForm.get('dataVencimento')?.touched && tarefaForm.get('dataVencimento')?.hasError('required')">
         A data é obrigatória.
       </small>
     </div>
 
-        <!-- Status -->
+    <!-- Status -->
     <div class="campo">
       <label for="status">Status</label>
       <select id="status" formControlName="statusTarefa">
@@ -48,8 +62,8 @@
       </select>
     </div>
 
-      <!-- Botão de Ação -->
-    <button type="submit" [disabled]="loading">
+    <!-- Botão de Ação -->
+    <button type="submit" [disabled]="loading || tarefaForm.invalid">
       {{ loading ? 'Guardando...' : (isEdicao ? 'Atualizar Tarefa' : 'Criar Tarefa') }}
     </button>
   </form>
