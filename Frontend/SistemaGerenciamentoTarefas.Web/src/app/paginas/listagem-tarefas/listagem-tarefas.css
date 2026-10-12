@@ -258,3 +258,80 @@ h1 {
     flex: 1;
   }
 }
+
+.fundo-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgb(48 43 61 / 45%);
+}
+
+.modal-confirmacao {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px;
+  border: 1px solid #e3dfed;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 36px rgb(45 35 71 / 18%);
+  text-align: center;
+}
+
+.icone-confirmacao {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  place-items: center;
+  border-radius: 50%;
+  color: #9e2c38;
+  background: #ffebee;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.modal-confirmacao h2 {
+  margin: 0 0 12px;
+  color: #383246;
+  font-size: 1.35rem;
+}
+
+.modal-confirmacao p {
+  margin: 0;
+  color: #696579;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.modal-confirmacao strong {
+  color: #383246;
+}
+
+.acoes-modal {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+  .acoes-modal .botao {
+    min-width: 110px;
+  }
+
+@media (max-width: 420px) {
+  .modal-confirmacao {
+    padding: 22px 18px;
+  }
+
+  .acoes-modal {
+    flex-direction: column-reverse;
+  }
+
+    .acoes-modal .botao {
+      width: 100%;
+    }
+}

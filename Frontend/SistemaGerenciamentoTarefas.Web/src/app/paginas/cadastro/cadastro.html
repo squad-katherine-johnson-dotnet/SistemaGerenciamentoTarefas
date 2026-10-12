@@ -1,5 +1,5 @@
 <div class="card-cadastro">
-  <h2>Cadastro de Usuária</h2>
+  <h2>Cadastro de Usuário</h2>
   
   <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()">
 
@@ -17,7 +17,7 @@
         O nome deve ter no máximo 100 caracteres.
       </small>
       <small class="erro" *ngIf="cadastroForm.get('nome')?.touched && cadastroForm.get('nome')?.hasError('pattern')">
-        O nome deve conter apenas letras e espaços.
+        Informe um nome válido.
       </small>
     </div>
 

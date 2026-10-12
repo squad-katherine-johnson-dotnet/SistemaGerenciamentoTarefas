@@ -22,27 +22,55 @@ export class TarefaFormComponent implements OnInit {
   isEdicao: boolean = false;
   tarefaId?: number;
   usuarioId!: number;
-  
+
   mensagemFeedback: string = '';
   isErro: boolean = false;
   loading: boolean = false;
 
   ngOnInit(): void {
-    this.usuarioId = Number(this.route.snapshot.paramMap.get('usuarioId'));
+    const usuarioIdParam = this.route.snapshot.paramMap.get('usuarioId');
     const idParam = this.route.snapshot.paramMap.get('id');
 
-    if (idParam) {
+    this.usuarioId = Number(usuarioIdParam);
+
+    if (
+      usuarioIdParam === null ||
+      !Number.isInteger(this.usuarioId) ||
+      this.usuarioId <= 0
+    ) {
+      this.isErro = true;
+      this.mensagemFeedback = 'ID de usuário inválido.';
+      return;
+    }
+
+    if (idParam !== null) {
       this.isEdicao = true;
       this.tarefaId = Number(idParam);
+
+      if (!Number.isInteger(this.tarefaId) || this.tarefaId <= 0) {
+        this.isErro = true;
+        this.mensagemFeedback = 'ID de tarefa inválido.';
+        return;
+      }
     }
-    
+
     this.tarefaForm = this.fb.group({
-      titulo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      descricao: ['', [Validators.required, Validators.maxLength(500)]],
+      titulo: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100),
+        Validators.pattern(/.*\S.*/)
+      ]],
+      descricao: ['', [
+        Validators.required,
+        Validators.maxLength(500),
+        Validators.pattern(/.*\S.*/)
+      ]],
       dataVencimento: ['', [Validators.required]],
       statusTarefa: [0, [Validators.required]]
     });
-    
+
+
     if (this.isEdicao && this.tarefaId) {
       this.carregarTarefa(this.tarefaId);
     }
@@ -62,13 +90,17 @@ export class TarefaFormComponent implements OnInit {
             statusTarefa: tarefa.statusTarefa !== undefined ? Number(tarefa.statusTarefa) : (tarefa.status === 'Concluida' || tarefa.status === 'Concluída' ? 1 : 0)
           });
         }
+        else {
+          this.isErro = true;
+          this.mensagemFeedback = 'Tarefa não encontrada.';
+        }
         this.cd.detectChanges();
       },
       error: (err) => {
         this.loading = false;
         this.isErro = true;
         this.mensagemFeedback = 'Erro ao carregar dados da tarefa.';
-        this.cd.detectChanges(); 
+        this.cd.detectChanges();
       }
     });
   }
@@ -95,6 +127,10 @@ export class TarefaFormComponent implements OnInit {
           this.mensagemFeedback = 'Tarefa atualizada com sucesso!';
           this.isErro = false;
           this.cd.detectChanges();
+
+          setTimeout(() => {
+            this.router.navigate(['/tarefas', this.usuarioId]);
+          }, 1500);
         },
         error: (err) => {
           this.loading = false;
@@ -109,9 +145,13 @@ export class TarefaFormComponent implements OnInit {
           this.loading = false;
           this.mensagemFeedback = 'Tarefa criada com sucesso!';
           this.isErro = false;
-          this.tarefaForm.reset({ statusTarefa: 0 });
           this.cd.detectChanges();
-        },
+
+          setTimeout(() => {
+            this.router.navigate(['/tarefas', this.usuarioId]);
+          }, 1500);
+        }
+        ,
         error: (err) => {
           this.loading = false;
           this.isErro = true;

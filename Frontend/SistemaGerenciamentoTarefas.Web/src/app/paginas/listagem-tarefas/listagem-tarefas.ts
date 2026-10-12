@@ -23,6 +23,9 @@ export class ListagemTarefasComponent implements OnInit {
   mensagemFeedback: string = '';
   isErro: boolean = false;
   loading: boolean = false;
+  mostrarConfirmacaoExclusao: boolean = false;
+  tarefaParaExcluir: Tarefa | null = null;
+
 
   ngOnInit(): void {
     this.usuarioId = Number(this.route.snapshot.paramMap.get('usuarioId'));
@@ -120,6 +123,46 @@ export class ListagemTarefasComponent implements OnInit {
     });
   }
 
+
+  reabrirTarefa(tarefa: Tarefa): void {
+    if (tarefa.id == null || !this.estaConcluida(tarefa)) {
+      return;
+    }
+
+    this.mensagemFeedback = '';
+
+    const tarefaAtualizada: Tarefa = {
+      ...tarefa,
+      statusTarefa: 0
+    };
+
+    this.tarefaService
+      .atualizar(this.usuarioId, tarefa.id, tarefaAtualizada)
+      .subscribe({
+        next: (resposta) => {
+          this.tarefas = this.tarefas.map(item =>
+            item.id === tarefa.id
+              ? (resposta ?? tarefaAtualizada)
+              : item
+          );
+
+          this.isErro = false;
+          this.mensagemFeedback = 'Tarefa reaberta com sucesso!';
+          this.cd.detectChanges();
+        },
+        error: (err) => {
+          this.isErro = true;
+          this.mensagemFeedback =
+            err.error?.mensagem ||
+            err.error?.Mensagem ||
+            'Erro ao reabrir tarefa.';
+
+          this.cd.detectChanges();
+        }
+      });
+  }
+
+
   excluirTarefa(tarefa: Tarefa): void {
     if (tarefa.id == null) {
       this.isErro = true;
@@ -127,20 +170,32 @@ export class ListagemTarefasComponent implements OnInit {
       return;
     }
 
-    const confirmou = window.confirm(
-      `Deseja excluir a tarefa "${tarefa.titulo}"?`
-    );
+    this.tarefaParaExcluir = tarefa;
+    this.mostrarConfirmacaoExclusao = true;
+    return;
+  }
 
-    if (!confirmou) {
+  cancelarExclusao(): void {
+    this.mostrarConfirmacaoExclusao = false;
+    this.tarefaParaExcluir = null;
+  }
+
+  confirmarExclusao(): void {
+    const tarefa = this.tarefaParaExcluir;
+    const tarefaId = tarefa?.id;
+
+    if (tarefa == null || tarefaId == null) {
       return;
     }
 
+    this.mostrarConfirmacaoExclusao = false;
+    this.tarefaParaExcluir = null;
     this.mensagemFeedback = '';
 
-    this.tarefaService.deletar(this.usuarioId, tarefa.id).subscribe({
+    this.tarefaService.deletar(this.usuarioId, tarefaId).subscribe({
       next: () => {
         this.tarefas = this.tarefas.filter(
-          item => item.id !== tarefa.id
+          item => item.id !== tarefaId
         );
 
         this.isErro = false;

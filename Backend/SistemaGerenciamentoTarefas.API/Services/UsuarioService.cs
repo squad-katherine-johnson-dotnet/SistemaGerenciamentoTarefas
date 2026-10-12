@@ -24,21 +24,6 @@ namespace SistemaGerenciamentoTarefas.API.Services {
             }).ToList();
         }
 
-        public async Task<UsuarioRespostaDto?> BuscarUsuarioPorIdAsync(int id) {
-
-            var usuario = await _usuarioRepository.BuscarUsuarioPorIdAsync(id);
-
-            if (usuario == null) {
-                return null;
-            }
-
-            return new UsuarioRespostaDto {
-                Id = usuario.Id,
-                Nome = usuario.Nome,
-                Email = usuario.Email
-            };
-        }
-
         public async Task<Usuario> CadastrarUsuarioAsync(UsuarioCadastroDto usuarioDto) {
 
             if (await _usuarioRepository.EmailExisteAsync(usuarioDto.Email)) {
@@ -53,38 +38,6 @@ namespace SistemaGerenciamentoTarefas.API.Services {
             usuario.SenhaHash = _passwordHasher.HashPassword(usuario, usuarioDto.Senha);
 
             return await _usuarioRepository.CadastrarUsuarioAsync(usuario);
-        }
-
-        public async Task<UsuarioRespostaDto?> AtualizarUsuarioAsync(int id, UsuarioAtualizacaoDto usuarioAtualizado) {
-
-            if (await _usuarioRepository.EmailExisteAsync(usuarioAtualizado.Email, id)) {
-                throw new ArgumentException("E-mail já cadastrado.");
-            }
-
-            var usuario = new Usuario {
-                Id = id,
-                Nome = usuarioAtualizado.Nome,
-                Email = usuarioAtualizado.Email
-            };
-
-            usuario.SenhaHash = _passwordHasher.HashPassword(usuario, usuarioAtualizado.Senha);
-
-            var usuarioAtualizadoResult = await _usuarioRepository.AtualizarUsuarioAsync(id, usuario);
-
-            if (usuarioAtualizadoResult == null) {
-                return null;
-            }
-
-            return new UsuarioRespostaDto {
-                Id = usuarioAtualizadoResult.Id,
-                Nome = usuarioAtualizadoResult.Nome,
-                Email = usuarioAtualizadoResult.Email
-            };
-        }
-
-        public async Task<bool> DeletarUsuarioAsync(int id) {
-
-            return await _usuarioRepository.DeletarUsuarioAsync(id);
         }
     }
 }
